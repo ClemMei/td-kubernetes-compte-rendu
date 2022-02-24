@@ -43,6 +43,8 @@ Software:
    commit: 3e64b11ed75e56e4898ea85f96b2e4af0301f43d
    ```
 
+<div style="page-break-after: always;"></div>
+
 ## Exercice 2 - Manipulation basique de pods
 
 Le but de cet exercice est de comprendre comment fonctionne la création, la suppression et la modification de pods.
@@ -147,6 +149,8 @@ Le but de cet exercice est de comprendre comment fonctionne la création, la su
    $ kubectl get pods 
    No resources found in default namespace.
    ```
+
+<div style="page-break-after: always;"></div>
 
 ## Exercice 3 - Manipulation de replicasets
 
@@ -334,6 +338,8 @@ Le but de cet exercice est de comprendre comment fonctionne la création, la su
    No resources found in default namespace.
    ```
 
+<div style="page-break-after: always;"></div>
+
 ## Exercice 4 - Manipulation de déploiements.
 
 Objectif: Le but de cet exercice est de comprendre comment fonctionne la création, la
@@ -493,6 +499,8 @@ suppression et la modification et la mise à jour d’un déploiement.
    No resources found in default namespace.
    ```
 
+<div style="page-break-after: always;"></div>
+
 ## Exercice 5 - Manipulation de Services
 
 1. Créer un déploiement nginx-deploiement à partir d’une image nginx.
@@ -596,6 +604,8 @@ suppression et la modification et la mise à jour d’un déploiement.
      
      * le **LoadBalancer** ou le partage de charge entre noeuds
        Ce service, disponible uniquement auprès d'un cloud provider permet d'exposer une application à l'externe. Une adresse IP est allouée au  *LoadBalancer* qui est lui même mappé aux *NodePorts* qui sont eux mêmes mappés avec le(s) *ClusterIP*   
+
+<div style="page-break-after: always;"></div>
 
 ## Exercice 6 - Manipulation de Configmaps.
 
@@ -725,6 +735,8 @@ Objectif: Manipuler les configmaps et les secrets.
    root@nginx-pod:/# echo "Je m'appelle $USER_FIRST_NAME et j'ai $USER_YEAR ans"
    Je m'appelle Clément et j'ai 34 ans
    ```
+
+<div style="page-break-after: always;"></div>
 
 ## Exercice 7 - Troubleshooting (Exercice bonus)
 
