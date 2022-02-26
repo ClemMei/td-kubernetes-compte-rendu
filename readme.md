@@ -998,4 +998,4 @@ exposer un service nodePort sur GKE:
   </html>
   ```
   
-  ![Printscreen05.png](/Users/camilo/Documents/2021-2022-IMT_FC-TI/UV3-INTES/Cours-Introduction-Au-DevOps/TD-Kubernetes/Compte-Rendu/Printscreen05.png)
+  ![Printscreen05.png](./Printscreen05.png)
