@@ -886,11 +886,116 @@ http://192.168.64.4:31634
 
 exposer un service nodePort sur GKE:
 
-*  Récupérer le port d’exposition du service ( ici 30317 )
+* Dans un premier temps, je me rend sur GKE pour créer un cluster kubernetes
+  
+  ![Printscreen04.png](./Printscreen04.png)
+
+* Une fois créé, je connecte mon CLI local au cluster distant
+  
+  ```bash
+  $ brew install --cask google-cloud-sdk
+  ...
+  $ gcloud auth login
+  You are now logged in as [t********@gmail.com].
+  Your current project is [None].  You can change this setting by running:
+    $ gcloud config set project PROJECT_ID
+  $ gcloud container clusters get-credentials my-cluster --zone europe-west6-a --project alien-kingdom-342312
+  Fetching cluster endpoint and auth data.
+  kubeconfig entry generated for my-cluster.
+  $ kubectl get nodes
+  NAME                                        STATUS   ROLES    AGE   VERSION
+  gke-my-cluster-default-pool-f7499d8a-rwpl   Ready    <none>   10m   v1.21.6-gke.1500
+  ```
+
+* Maintenant que le cluster et les noeuds sont disponibles depuis mon CLI, je créé un pod nginx et le *NodePort* demandé :
+  
+  ```bash
+  $ kubectl run nginx-pod --image nginx:latest --dry-run=client -o yaml > nginx-pod-gke.yml 
+  $ vim nginx-pod-gke.yml
+  ```
+  
+  ```yaml
+  apiVersion: v1
+  kind: Pod
+  metadata:
+    creationTimestamp: null
+    labels:
+      run: nginx-pod
+    name: nginx-pod
+  spec:
+    containers:
+    - image: nginx:latest
+      name: nginx-pod
+      resources: {}
+      ports:
+      - containerPort: 80 # Ajout du port d'écoute du conteneur
+    dnsPolicy: ClusterFirst
+    restartPolicy: Always
+  status: {}
+  ```
+  
+  ```bash
+  $ kubectl apply -f nginx-pod-gke.yml
+  pod/nginx-pod created
+  $ kubectl expose pod nginx-pod --name nginx-svc-nodeport  --type NodePort --port 8888 --target-port 80
+  
+  service/nginx-svc-nodeport exposed
+  ```
+  
+  Récupérer le port d’exposition du service ( ici 30317 )
   
   ![Printscreen01.png](./Printscreen01.png)
+  
+  ```bash
+  $ kubectl describe services nginx-svc-nodeport | grep NodePort
+  Type:                     NodePort
+  NodePort:                 <unset>  30411/TCP
+  ```
 
 * Créer un firewall qui accepte toutes les communications http sur ce port pour toutes les machines du cluster kubernetes:[lien stackoverflow qui répond à la question](https://stackoverflow.com/questions/62974497/gke-nodeport-service-refusing-incoming-traffic)
+  
+  ```bash
+  $ gcloud compute --project=alien-kingdom-342312 firewall-rules create test-node-port --allow tcp:30411
+  Creating firewall...⠹Created [https://www.googleapis.com/compute/v1/projects/alien-kingdom-342312/global/firewalls/test-node-port].                                                                
+  Creating firewall...done.                                                                                                                                                                          
+  NAME            NETWORK  DIRECTION  PRIORITY  ALLOW      DENY  DISABLED
+  test-node-port  default  INGRESS    1000      tcp:30411        False
+  ```
 - Récupérer l’adresse IP public d’un node qui contient un de nos pods.
+  
+  ```bash
+  $ kubectl get nodes -o wide 
+  NAME                                        STATUS   ROLES    AGE   VERSION            INTERNAL-IP   EXTERNAL-IP     OS-IMAGE                             KERNEL-VERSION   CONTAINER-RUNTIME
+  gke-my-cluster-default-pool-f7499d8a-rwpl   Ready    <none>   74m   v1.21.6-gke.1500   10.172.0.2    34.65.182.114   Container-Optimized OS from Google   5.4.144+         containerd://1.4.8
+  ```
 
 - Lancer un curl <ip-du-node>:<port-du-NodePort>
+  
+  ```bash
+  $ curl 34.65.182.114:30411 
+  <!DOCTYPE html>
+  <html>
+  <head>
+  <title>Welcome to nginx!</title>
+  <style>
+  html { color-scheme: light dark; }
+  body { width: 35em; margin: 0 auto;
+  font-family: Tahoma, Verdana, Arial, sans-serif; }
+  </style>
+  </head>
+  <body>
+  <h1>Welcome to nginx!</h1>
+  <p>If you see this page, the nginx web server is successfully installed and
+  working. Further configuration is required.</p>
+  
+  <p>For online documentation and support please refer to
+  <a href="http://nginx.org/">nginx.org</a>.<br/>
+  Commercial support is available at
+  <a href="http://nginx.com/">nginx.com</a>.</p>
+  
+  <p><em>Thank you for using nginx.</em></p>
+  </body>
+  </html>
+  ```
+  
+  ![Printscreen05.png](/Users/camilo/Documents/2021-2022-IMT_FC-TI/UV3-INTES/Cours-Introduction-Au-DevOps/TD-Kubernetes/Compte-Rendu/Printscreen05.png)
