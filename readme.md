@@ -595,15 +595,11 @@ suppression et la modification et la mise à jour d’un déploiement.
    
    * Ces différents services répondent à différents besoins et s'imbriquent à la manière de "poupées russes".
      
-     * le **ClusterIP** et la communication interpods
-       Du fait du caractère ephémère des pods, ce service permet de formaliser la communication entre pods à l'intérieur d'un cluster kubernetes.
+     * le **ClusterIP** et la communication interpods : Du fait du caractère ephémère des pods, ce service permet de formaliser la communication entre pods à l'intérieur d'un cluster kubernetes.
      
-     * le **NodePort**  et l'accès externe
-       celui-ci va ouvrir l'application à l'externe en ouvrant un port sur les noeud. le trafic est acheminé ensuite sur le *ClusterIP*
-       Dans le cas ou l'on souhaite que le trafic soit partagé entre les noeuds, ce type de service n'est plus suffisant.
+     * le **NodePort**  et l'accès externe : Celui-ci va ouvrir l'application à l'externe en ouvrant un port sur les noeud. le trafic est acheminé ensuite sur le *ClusterIP*. Dans le cas ou l'on souhaite que le trafic soit partagé entre les noeuds, ce type de service n'est plus suffisant.
      
-     * le **LoadBalancer** ou le partage de charge entre noeuds
-       Ce service, disponible uniquement auprès d'un cloud provider permet d'exposer une application à l'externe. Une adresse IP est allouée au  *LoadBalancer* qui est lui même mappé aux *NodePorts* qui sont eux mêmes mappés avec le(s) *ClusterIP*   
+     * le **LoadBalancer** ou le partage de charge entre noeuds : Ce service, disponible uniquement auprès d'un cloud provider permet d'exposer une application à l'externe. Une adresse IP est allouée au  *LoadBalancer* qui est lui même mappé aux *NodePorts* qui sont eux mêmes mappés avec le(s) *ClusterIP*   
 
 <div style="page-break-after: always;"></div>
 
