@@ -767,7 +767,7 @@ environnement/application non fonctionnel ).
    
    exposer un service nodePort sur minikube: minikube service --url
    
-   Dans un premier temps, je m'assure que l'appliction est accessible depuis un conteneur nginx dans le cluster kubernetes : 
+   Dans un premier temps, je m'assure que l'application est accessible depuis un conteneur nginx dans le cluster kubernetes : 
    
    ```bash
    $ kubectl apply -f deployments.yaml
@@ -857,7 +857,7 @@ environnement/application non fonctionnel ).
      </div>
    
    </body>
-   </html> maintenant
+   </html>
    ```
 
 Maintenant que les applications sont accessibles par les services de type *ClusterIP*, je transforme simplement le type des deux services en  *NodePort* dans le fichier services.yaml
@@ -884,7 +884,7 @@ http://192.168.64.4:31634
 
 ![Printscreen03.png](./Printscreen03.png)
 
-exposer un service nodePort sur GKE:
+Exposer un service nodePort sur GKE:
 
 * Dans un premier temps, je me rend sur GKE pour créer un cluster kubernetes
   
@@ -907,7 +907,7 @@ exposer un service nodePort sur GKE:
   gke-my-cluster-default-pool-f7499d8a-rwpl   Ready    <none>   10m   v1.21.6-gke.1500
   ```
 
-* Maintenant que le cluster et les noeuds sont disponibles depuis mon CLI, je créé un pod nginx et le *NodePort* demandé :
+* Maintenant que le cluster et les noeuds sont disponibles depuis mon CLI, je créé un pod nginx pour afficher un site web et je créé le *NodePort* demandé :
   
   ```bash
   $ kubectl run nginx-pod --image nginx:latest --dry-run=client -o yaml > nginx-pod-gke.yml 
